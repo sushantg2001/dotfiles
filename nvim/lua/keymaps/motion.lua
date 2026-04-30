@@ -13,18 +13,7 @@ map('i', '<C-h>', '<left>')
 map({ 'n', 'v', 'o' }, 'J', '5j', { desc = '5 lines down' })
 map({ 'n', 'v', 'o' }, 'K', '5k', { noremap = true, desc = '5 lines up' })
 map('n', '<C-j>', '<C-e>', { desc = 'Scroll down' })
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspOverride', { clear = true }),
-  callback = function(event)
-    pcall(vim.keymap.del, 'n', '<C-k>', { buffer = event.buf })
-    vim.keymap.set('n', '<C-k>', '<C-y>', {
-      buffer = event.buf,
-      noremap = true,
-      silent = true,
-      desc = 'Force Scroll Up',
-    })
-  end,
-})
+map('n', '<C-k>', '<C-y>')
 map('i', '<C-j>', '<down>')
 map('i', '<C-k>', '<up>')
 map('v', '<C-j>', ":m '>+1<CR>gv=gv")
@@ -37,14 +26,14 @@ cmp.setup {
       if cmp.visible() then
         cmp.select_next_item()
       else
-        fallback() -- Triggers the <C-t> indent map above
+        fallback()
       end
     end, { 'i', 's' }),
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       else
-        fallback() -- Triggers the <C-d> outdent map above
+        fallback()
       end
     end, { 'i', 's' }),
     ['<C-e>'] = cmp.mapping.scroll_docs(4),
@@ -52,16 +41,20 @@ cmp.setup {
   },
 }
 
+local actions = require('telescope.actions')
 require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        ['<Tab>'] = require('telescope.actions').move_selection_next,
-        ['<S-Tab>'] = require('telescope.actions').move_selection_previous,
+        ['<Tab>'] = actions.move_selection_next,
+        ['<S-Tab>'] = actions.move_selection_previous,
       },
       n = {
-        ['<C-e>'] = require('telescope.actions').preview_scrolling_down,
-        ['<C-b>'] = require('telescope.actions').preview_scrolling_up,
+        ['k'] = actions.move_selection_previous,
+        ['j'] = actions.move_selection_next,
+        ['<C-e>'] = actions.preview_scrolling_down,
+        ['<C-b>'] = actions.preview_scrolling_up,
+        ['<Esc>'] = actions.close,
       },
     },
   },
@@ -96,9 +89,7 @@ end, { expr = true, desc = 'Previous Hunk' })
 local ok, harpoon = pcall(require, 'harpoon')
 if ok then
   map('n', '<leader>ha', function() harpoon:list():add() end, { desc = '[H]arpoon [A]dd file' })
-
   map('n', '<leader>hh', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = '[H]arpoon menu' })
-
   map('n', '<leader>1', function() harpoon:list():select(1) end, { desc = 'Harpoon file 1' })
   map('n', '<leader>2', function() harpoon:list():select(2) end, { desc = 'Harpoon file 2' })
   map('n', '<leader>3', function() harpoon:list():select(3) end, { desc = 'Harpoon file 3' })
