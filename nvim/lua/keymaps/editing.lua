@@ -5,7 +5,14 @@
 
 local map = vim.keymap.set
 
+map('i', '<C-e>', '<Del>', { desc = 'Delete' })
+map('i', '<C-b>', '<C-o>db', { desc = 'Delete backward to start of word' })
+
 map('n', 'U', '<C-r>', { desc = 'Redo' })
+map('n', '<C-u>', '<cmd>Telescope undo<cr>', { desc = 'Telescope: Visual Undo Tree' })
+map('i', '<C-u>', '<Cmd>undo<CR>', { desc = 'Undo' })
+-- Redo in Insert Mode using the obscure Unit Separator (\31)
+map('i', '\31', '<Cmd>redo<CR>', { desc = 'Redo via Ctrl+Shift+U' })
 
 map({ 'n', 'v' }, 'gy', '"+y', { desc = 'Clipboard yank motion' })
 map('n', 'gyy', '"+yy', { desc = 'Clipboard yank line' })
@@ -32,18 +39,5 @@ map('n', '<C-p>', '<cmd>%d _<cr>"+P', { desc = 'Replace file with clipboard' })
 map('v', '<C-p>', '"+p', { desc = 'Replace selection with clipboard' })
 map('i', '<C-p>', '<C-r>+', { desc = 'Paste from clipboard' })
 
-map('n', '"', '"0', { desc = 'Fixed register a' })
-map('n', "'", '"', { desc = 'Register prefix' })
-
-map('v', '<A-j>', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
-map('v', '<A-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
-
-map('v', '<Tab>', '>gv', { desc = 'Indent selection' })
-map('v', '<S-Tab>', '<gv', { desc = 'De-indent selection' })
-
-map('n', '<CR>', 'o<Esc>', { desc = 'Add line below' })
-map('n', '<S-CR>', 'O<Esc>', { desc = 'Add line above' })
-map({ 'n', 'i', 'v' }, '<C-CR>', '<cmd>w<cr><esc>', { desc = 'Save file' })
-
-map('n', '<Tab>', '>>', { desc = 'Indent line' })
-map('n', '<S-Tab>', '<<', { desc = 'De-indent line' })
+map('n', '<C-i>', 'i<Space><Esc>', { desc = 'Insert space before cursor' })
+map('n', '<C-a>', 'a<Space><Esc>', { desc = 'Insert space after cursor' })

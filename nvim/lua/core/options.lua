@@ -4,13 +4,18 @@
 
 local opt = vim.opt
 
+-- disable swap file and set undo history
+vim.opt.swapfile = false -- No more .swp files
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.expand '~/.local/state/nvim/undo//'
+
 -- line numbers
 opt.number = true
 opt.relativenumber = true
 
 -- tabs / indentation
-opt.tabstop = 2
-opt.shiftwidth = 2
+opt.tabstop = 4
+opt.shiftwidth = 4
 opt.expandtab = true
 opt.autoindent = true
 
@@ -35,7 +40,7 @@ opt.splitbelow = true
 
 -- behaviour
 opt.mouse = 'a'
-opt.clipboard = 'unnamedplus' -- sync with system clipboard
+opt.clipboard = ''
 opt.breakindent = true -- wrapped lines preserve indentation
 opt.undofile = true -- persist undo history across sessions
 opt.updatetime = 250 -- faster CursorHold / LSP hover

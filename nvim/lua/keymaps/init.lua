@@ -6,4 +6,5 @@ require 'keymaps.lsp'
 require 'keymaps.git'
 require 'keymaps.ui'
 require 'keymaps.tools'
-require 'keymaps.commands' -- intent menus last, after all keymaps registered
+require 'keymaps.commands'
+require 'keymaps.terminal'
