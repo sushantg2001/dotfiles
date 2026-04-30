@@ -49,3 +49,9 @@ map('n', '<leader>sw', telescope.grep_string, { desc = '[S]earch current [W]ord'
 map('n', '<leader>sd', telescope.diagnostics, { desc = '[S]earch [D]iagnostics' })
 map('n', '<leader>sr', telescope.resume, { desc = '[S]earch [R]esume' })
 map('n', '<leader>st', '<cmd>TodoTelescope<cr>', { desc = '[S]earch [T]odos' })
+map('n', '<leader>s/', function()
+  telescope.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+    winblend = 10,
+    previewer = false,
+  })
+end, { desc = '[S]earch [/] in current buffer' })

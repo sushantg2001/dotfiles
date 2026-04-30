@@ -15,7 +15,7 @@ return {
       { '<leader>c', group = '[C]quickfix' },
       { '<leader>d', group = '[D]elete (no yank)' },
       { '<leader>g', group = '[G]it' },
-      { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+      { '<leader>h', group = 'Git [H]unk',        mode = { 'n', 'v' } },
       { '<leader>r', group = '[R]ename' },
       { '<leader>s', group = '[S]earch / [S]plit' },
       { '<leader>t', group = '[T]oggle' },
