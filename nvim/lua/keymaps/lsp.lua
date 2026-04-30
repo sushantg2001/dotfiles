@@ -60,7 +60,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- -----------------------------------------------------------------
 
     map('n', '[d', vim.diagnostic.goto_prev, { buffer = buf, desc = 'Prev diagnostic' })
-
     map('n', ']d', vim.diagnostic.goto_next, { buffer = buf, desc = 'Next diagnostic' })
 
     map('n', '<leader>le', vim.diagnostic.open_float, { buffer = buf, desc = '[L]SP diagnostic [E]rror float' })
@@ -88,7 +87,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     local client = vim.lsp.get_client_by_id(event.data.client_id)
 
-    if client and client.supports_method 'textDocument/inlayHint' then
+    if client and client:supports_method 'textDocument/inlayHint' then
       map(
         'n',
         '<leader>lh',
@@ -101,7 +100,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- REFERENCE HIGHLIGHTING ON CURSOR HOLD
     -- -----------------------------------------------------------------
 
-    if client and client.supports_method 'textDocument/documentHighlight' then
+    if client and client:supports_method 'textDocument/documentHighlight' then
       local hi = vim.api.nvim_create_augroup('lsp-reference-highlight', { clear = false })
 
       vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {

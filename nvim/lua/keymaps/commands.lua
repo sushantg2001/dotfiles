@@ -21,10 +21,6 @@
 local map = vim.keymap.set
 local wk = require 'which-key'
 
--- =============================================================================
--- REGISTER GROUPS WITH WHICH-KEY
--- =============================================================================
-
 wk.add {
   -- top-level intent groups
   { 'r', group = 'Editor commands' },
@@ -47,35 +43,7 @@ wk.add {
   { '<leader>x', group = 'Diagnostics' },
 }
 
--- =============================================================================
--- r - EDITOR COMMANDS
--- frequent operations on the current file / editor
--- =============================================================================
-
-map('n', 'rf', function() require('conform').format { async = true } end, { desc = 'Format file' })
-
-map('n', 'rr', '<cmd>LspRestart<cr>', { desc = 'Restart LSP' })
-
-map('n', 'rd', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', { desc = 'Buffer diagnostics' })
-
-map('n', 'rD', '<cmd>Trouble diagnostics toggle<cr>', { desc = 'Workspace diagnostics' })
-
-map('n', 'rn', vim.lsp.buf.rename, { desc = 'Rename symbol' })
-
-map('n', 'ra', vim.lsp.buf.code_action, { desc = 'Code action' })
-
-map('n', 'rh', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {}) end, { desc = 'Toggle inlay hints' })
-
-map('n', 'rw', '<cmd>set wrap!<cr>', { desc = 'Toggle word wrap' })
-
-map('n', 'rs', '<cmd>set spell!<cr>', { desc = 'Toggle spell check' })
-
-map('n', 'rc', 'r', { desc = 'Replace single char (native r)' })
-
--- =============================================================================
--- R - APP COMMANDS
--- frequent operations on the neovim app itself
--- =============================================================================
+map({ 'n', 'v' }, 'r', ':', { desc = 'Remap commands mode to r' })
 
 map('n', 'Rl', '<cmd>Lazy<cr>', { desc = 'Open Lazy' })
 map('n', 'Rm', '<cmd>Mason<cr>', { desc = 'Open Mason' })
@@ -83,53 +51,10 @@ map('n', 'Rh', '<cmd>checkhealth<cr>', { desc = 'Check health' })
 map('n', 'Rq', '<cmd>qa<cr>', { desc = 'Quit all' })
 map('n', 'RQ', '<cmd>qa!<cr>', { desc = 'Force quit all' })
 map('n', 'Rs', '<cmd>wa<cr>', { desc = 'Save all buffers' })
-
 map('n', 'Rc', function() require('telescope.builtin').colorscheme { enable_preview = true } end, { desc = 'Change colorscheme' })
-
 map('n', 'Rk', '<cmd>Telescope keymaps<cr>', { desc = 'Browse keymaps' })
 
--- =============================================================================
--- q - RUN / BUILD
--- VSCode Ctrl+q = build/run commands
--- populate with your project-specific runners
--- =============================================================================
-
-map('n', 'qt', '<cmd>ToggleTerm<cr>', { desc = 'Open terminal' })
-
-map(
-  'n',
-  'qf',
-  function() require('toggleterm.terminal').Terminal:new({ cmd = 'make', direction = 'float', close_on_exit = false }):toggle() end,
-  { desc = 'Run make' }
-)
-
-map(
-  'n',
-  'qi',
-  function() require('toggleterm.terminal').Terminal:new({ cmd = 'npm install', direction = 'float', close_on_exit = false }):toggle() end,
-  { desc = 'npm install' }
-)
-
-map(
-  'n',
-  'qr',
-  function() require('toggleterm.terminal').Terminal:new({ cmd = 'npm run dev', direction = 'float', close_on_exit = false }):toggle() end,
-  { desc = 'npm run dev' }
-)
-
-map(
-  'n',
-  'qb',
-  function() require('toggleterm.terminal').Terminal:new({ cmd = 'npm run build', direction = 'float', close_on_exit = false }):toggle() end,
-  { desc = 'npm run build' }
-)
-
--- =============================================================================
--- z - NEW INTENT
--- commands with "create something new" intent
--- VSCode z/Z
--- NOTE: vim fold commands (za, zo, zc etc.) still work - only bare z is a group
--- =============================================================================
+map('n', 'Q', '@@', { desc = 'Play last macro' })
 
 map('n', 'zf', '<cmd>enew<cr>', { desc = 'New file (unnamed buffer)' })
 map('n', 'zb', '<cmd>enew<cr>', { desc = 'New buffer' })
@@ -140,11 +65,6 @@ map('n', 'zn', function()
   local name = vim.fn.input 'New file name: '
   if name ~= '' then vim.cmd('edit ' .. name) end
 end, { desc = 'New named file' })
-
--- =============================================================================
--- Z - FILE INTENT
--- commands with "do something to the current file" intent
--- =============================================================================
 
 map('n', 'Zs', '<cmd>w<cr>', { desc = 'Save file' })
 map('n', 'ZS', '<cmd>wa<cr>', { desc = 'Save all files' })
@@ -181,28 +101,6 @@ end, { desc = 'Copy filename to clipboard' })
 
 map('n', 'Zx', '<cmd>bd<cr>', { desc = 'Close file / buffer' })
 
--- =============================================================================
--- m - EDITOR AI / MACHINE
--- AI operations scoped to the current editor/buffer
--- Populate with your AI plugin keymaps when added
--- =============================================================================
-
 wk.add { { 'm', group = 'Editor AI (pending setup)' } }
 
--- placeholder - wire in your AI plugin here
--- e.g. for avante.nvim:
--- map('n', 'ma', '<cmd>AvanteAsk<cr>',  { desc = 'AI ask' })
--- map('n', 'mc', '<cmd>AvanteChat<cr>', { desc = 'AI chat' })
--- map('v', 'me', '<cmd>AvanteEdit<cr>', { desc = 'AI edit selection' })
-
--- =============================================================================
--- M - APP AI / MACHINE
--- AI operations at the app / workspace level
--- =============================================================================
-
 wk.add { { 'M', group = 'App AI (pending setup)' } }
-
--- placeholder - wire in your AI plugin here
--- e.g.:
--- map('n', 'Ms', '<cmd>AvanteToggle<cr>', { desc = 'AI sidebar toggle' })
--- map('n', 'Mh', '<cmd>AvanteHistory<cr>', { desc = 'AI history' })
