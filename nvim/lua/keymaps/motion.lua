@@ -85,6 +85,11 @@ map('n', '[h', function()
   vim.schedule(function() require('gitsigns').nav_hunk('prev') end)
   return '<Ignore>'
 end, { expr = true, desc = 'Previous Hunk' })
+vim.keymap.set('i', '<Char-0x1b>[105;5u', '<C-o>I', { desc = 'Force cursor to start of line' })
+vim.keymap.set('i', '<C-i>', '<C-o>I', { desc = 'Cursor at start of line' })
+
+vim.keymap.set('n', ']]', [[/<C-r>=escape(']', '/')<CR><CR>]], { desc = 'Next ]' })
+vim.keymap.set('n', '[[', [[?<C-r>=escape('[', '/')<CR><CR>]], { desc = 'Prev [' })
 
 local ok, harpoon = pcall(require, 'harpoon')
 if ok then

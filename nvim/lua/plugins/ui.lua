@@ -12,11 +12,11 @@ return {
   {
     'folke/tokyonight.nvim',
     priority = 1000,
-    config   = function()
+    config = function()
       require('tokyonight').setup {
-        style       = 'night',   -- night | storm | day | moon
+        style = 'night', -- night | storm | day | moon
         transparent = false,
-        styles      = {
+        styles = {
           comments = { italic = true },
           keywords = { italic = true },
         },
@@ -31,17 +31,15 @@ return {
   -- -----------------------------------------------------------------
   {
     'echasnovski/mini.statusline',
-    version  = '*',
-    config   = function()
+    version = '*',
+    config = function()
       local statusline = require 'mini.statusline'
       statusline.setup {
         use_icons = vim.g.have_nerd_font,
       }
       -- override the cursor location section to show LINE:COL
       ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
+      statusline.section_location = function() return '%2l:%-2v' end
     end,
   },
 }

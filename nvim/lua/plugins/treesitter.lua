@@ -42,6 +42,10 @@ return {
           ['ic'] = { query = '@class.inner', desc = 'Inside class' },
           ['aa'] = { query = '@parameter.outer', desc = 'Around argument' },
           ['ia'] = { query = '@parameter.inner', desc = 'Inside argument' },
+          ['ii'] = { query = '@conditional.outer', desc = 'Around if' },
+          ['ai'] = { query = '@conditional.inner', desc = 'Inside if' },
+          ['al'] = { query = '@loop.outer', desc = 'Around loop' },
+          ['il'] = { query = '@loop.inner', desc = 'Inside loop' },
         },
       },
       move = {
