@@ -8,16 +8,14 @@ local map = vim.keymap.set
 
 local ok, gs = pcall(require, 'gitsigns')
 if ok then
-  -- navigate hunks
-  map('n', ']h', gs.next_hunk, { desc = 'Next git hunk' })
-  map('n', '[h', gs.prev_hunk, { desc = 'Prev git hunk' })
-
   -- stage / reset / undo
   map('n', '<leader>hs', gs.stage_hunk, { desc = '[H]unk [S]tage' })
   map('n', '<leader>hr', gs.reset_hunk, { desc = '[H]unk [R]eset' })
   map('n', '<leader>hu', gs.undo_stage_hunk, { desc = '[H]unk [U]ndo stage' })
-  map('v', '<leader>hs', function() gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' } end, { desc = '[H]unk [S]tage selection' })
-  map('v', '<leader>hr', function() gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' } end, { desc = '[H]unk [R]eset selection' })
+  map('v', '<leader>hs', function() gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' } end,
+    { desc = '[H]unk [S]tage selection' })
+  map('v', '<leader>hr', function() gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' } end,
+    { desc = '[H]unk [R]eset selection' })
 
   -- buffer-level stage / reset
   map('n', '<leader>hS', gs.stage_buffer, { desc = '[H]unk [S]tage buffer' })
