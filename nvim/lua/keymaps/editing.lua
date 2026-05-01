@@ -6,7 +6,7 @@
 local map = vim.keymap.set
 
 map('i', '<C-e>', '<Del>', { desc = 'Delete' })
-map('i', '<C-b>', '<C-o>db', { desc = 'Delete backward to start of word' })
+map('i', '<C-b>', '<C-o>ldb', { desc = 'Delete backward to start of word' })
 
 map('n', 'U', '<C-r>', { desc = 'Redo' })
 map('n', '<C-u>', '<cmd>Telescope undo<cr>', { desc = 'Telescope: Visual Undo Tree' })

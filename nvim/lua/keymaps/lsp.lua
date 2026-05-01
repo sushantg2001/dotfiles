@@ -3,9 +3,6 @@
 -- Everything that uses language intelligence.
 -- Set inside LspAttach so keymaps are buffer-local and only active
 -- when an LSP server is actually connected.
--- VSCode reference: gd conflict resolved - LSP go-to-def moved to <leader>ld
--- NOTE: K (hover) moved to <C-Space> since K is now 5 lines up (motion.lua)
---       gd moved to <leader>ld since gd is now clipboard delete (editing.lua)
 -- =============================================================================
 
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -27,8 +24,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('n', '<leader>le', vim.diagnostic.open_float, { buffer = buf, desc = '[L]SP diagnostic [E]rror float' })
     map('n', '<leader>lq', vim.diagnostic.setloclist, { buffer = buf, desc = '[L]SP diagnostic [Q]uickfix' })
     map('n', '<leader>lwa', vim.lsp.buf.add_workspace_folder, { buffer = buf, desc = '[L]SP [W]orkspace [A]dd folder' })
-    map('n', '<leader>lwr', vim.lsp.buf.remove_workspace_folder,
-      { buffer = buf, desc = '[L]SP [W]orkspace [R]emove folder' })
+    map('n', '<leader>lwr', vim.lsp.buf.remove_workspace_folder, { buffer = buf, desc = '[L]SP [W]orkspace [R]emove folder' })
     map(
       'n',
       '<leader>lwl',

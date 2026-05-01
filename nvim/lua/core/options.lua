@@ -76,3 +76,10 @@ if vim.g.is_windows then
   -- windows needs explicit path separator for backslash handling
   opt.shellslash = true
 end
+
+if not vim.treesitter.ft_to_lang then
+  vim.treesitter.ft_to_lang = function(ft)
+    local ok, lang = pcall(vim.treesitter.language.get_lang, ft)
+    return ok and lang or ft
+  end
+end

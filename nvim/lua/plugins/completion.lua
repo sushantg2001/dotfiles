@@ -12,6 +12,7 @@ return {
     -- snippet engine
     {
       'L3MON4D3/LuaSnip',
+      version = 'v2.*',
       build = (function()
         -- skip jsregexp build on Windows (not essential)
         if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then return end

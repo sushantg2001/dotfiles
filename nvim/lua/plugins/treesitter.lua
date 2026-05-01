@@ -6,7 +6,7 @@ return {
     'nvim-treesitter/nvim-treesitter-textobjects',
   },
   main = 'nvim-treesitter',
-  branch = 'main',
+  version = '*',
   opts = {
     ensure_installed = {
       'bash',

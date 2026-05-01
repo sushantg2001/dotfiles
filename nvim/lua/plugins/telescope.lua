@@ -18,7 +18,7 @@ return {
     'debugloop/telescope-undo.nvim',
     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
   },
-  config       = function()
+  config = function()
     require('telescope').setup {
       defaults = {
         path_display = { 'truncate' },
