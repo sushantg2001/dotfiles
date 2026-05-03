@@ -20,87 +20,81 @@
 
 local map = vim.keymap.set
 local wk = require 'which-key'
+-- guard: neo-tree needs at least 40 columns to open without E36
+local function neotree(cmd)
+  if vim.o.columns < 40 then
+    vim.notify('Window too small for explorer', vim.log.levels.WARN)
+    return
+  end
+  vim.cmd('Neotree ' .. cmd)
+end
+-- r - commands mode
+map({ 'v', 'n' }, 'r', ':', { desc = 'commands mode' })
 
+-- R - workspace commands
+map('n', 'R', '<Nop>', { desc = 'Disable default Replace mode' })
 wk.add {
-  -- top-level intent groups
-  { 'r', group = 'Editor commands' },
   { 'R', group = 'App commands' },
-  { 'q', group = 'Run / Build' },
-  { 'z', group = 'New intent' },
-  { 'Z', group = 'File intent' },
-  { 'm', group = 'Editor AI' },
-  { 'M', group = 'App AI' },
-
-  -- leader subgroups
-  { '<leader>b', group = '[B]uffer' },
-  { '<leader>g', group = '[G]it' },
-  { '<leader>h', group = 'Git [H]unk' },
-  { '<leader>j', group = '[J]oin' },
-  { '<leader>l', group = '[L]SP' },
-  { '<leader>lw', group = '[L]SP [W]orkspace' },
-  { '<leader>s', group = '[S]earch' },
-  { '<leader>t', group = '[T]ab' },
-  { '<leader>x', group = 'Diagnostics' },
 }
 
-map({ 'n', 'v' }, 'r', ':', { desc = 'Remap commands mode to r' })
-
+map('n', 'Rr', 'r', { desc = 'Replace letter' })
+map('n', 'RR', 'R', { desc = 'Open replace mode' })
 map('n', 'Rl', '<cmd>Lazy<cr>', { desc = 'Open Lazy' })
 map('n', 'Rm', '<cmd>Mason<cr>', { desc = 'Open Mason' })
 map('n', 'Rh', '<cmd>checkhealth<cr>', { desc = 'Check health' })
 map('n', 'Rq', '<cmd>qa<cr>', { desc = 'Quit all' })
 map('n', 'RQ', '<cmd>qa!<cr>', { desc = 'Force quit all' })
-map('n', 'Rs', '<cmd>wa<cr>', { desc = 'Save all buffers' })
-map('n', 'Rc', function() require('telescope.builtin').colorscheme { enable_preview = true } end, { desc = 'Change colorscheme' })
-map('n', 'Rk', '<cmd>Telescope keymaps<cr>', { desc = 'Browse keymaps' })
+map('n', 'Rs', '<cmd>wa<cr>', { desc = 'save all' })
 
-map('n', 'Q', '@@', { desc = 'Play last macro' })
+-- z - file/splits/explorer commands
+wk.add {
+  { 'z', group = 'Explorer/buffer/tabs/splits commands' },
+}
+map('n', 'zz', function() neotree 'toggle' end, { desc = 'Toggle Explorer' })
+map('n', 'zf', function() neotree 'reveal' end, { desc = 'Explorer reveal [F]ile' })
+map('n', 'zb', function() neotree 'buffers' end, { desc = '[E]xplorer [B]uffers' })
+map('n', 'zl', '<cmd>BufferLineCycleNext<cr>', { desc = 'Next buffer tab' })
+map('n', 'zh', '<cmd>BufferLineCyclePrev<cr>', { desc = 'Prev buffer tab' })
+map('n', 'zs', '<cmd>vsplit<CR>', { desc = 'Split Vertically' })
+map('n', 'zS', '<cmd>split<CR>', { desc = 'Split Horizontally' })
+map('n', 'zx', '<C-w>c', { desc = '[C]lose current split' })
+map('n', 'zm', '<C-w>o', { desc = 'Close [O]ther splits (Maximize)' })
+map('n', 'ze', '<C-w>=', { desc = '[E]qualize split sizes' })
 
-map('n', 'zf', '<cmd>enew<cr>', { desc = 'New file (unnamed buffer)' })
-map('n', 'zb', '<cmd>enew<cr>', { desc = 'New buffer' })
-map('n', 'zt', '<cmd>tabnew<cr>', { desc = 'New tab' })
-map('n', 'zs', '<cmd>split enew<cr>', { desc = 'New horizontal split' })
-map('n', 'zv', '<cmd>vsplit enew<cr>', { desc = 'New vertical split' })
-map('n', 'zn', function()
-  local name = vim.fn.input 'New file name: '
-  if name ~= '' then vim.cmd('edit ' .. name) end
-end, { desc = 'New named file' })
+-- Z - Git/Github/tabs/projects commands
+wk.add {
+  { 'Z', group = 'Explorer/file commands' },
+}
+map('n', 'Zg', '<cmd>Neogit<CR>', { desc = 'Neo[G]it Status' })
+map('n', 'Zc', '<cmd>Git commit<CR>', { desc = '[C]ommit (Fugitive)' })
+map('n', 'ZP', '<cmd>Git push<CR>', { desc = '[P]ush' })
+map('n', 'Zl', '<cmd>Git pull<CR>', { desc = 'Pu[l]l' })
+map('n', 'Zd', '<cmd>DiffviewOpen<CR>', { desc = '[D]iff Project' })
+map('n', 'Zh', '<cmd>DiffviewFileHistory %<CR>', { desc = 'File [H]istory' })
+map('n', 'Zx', '<cmd>GitConflictListQf<CR>', { desc = 'List Conflict [X]' })
+map('n', 'Zp', '<cmd>Gitsigns preview_hunk<CR>', { desc = '[p]review Hunk' })
+map('n', 'Zs', '<cmd>Gitsigns stage_hunk<CR>', { desc = '[S]tage Hunk' })
+map('n', 'Zr', '<cmd>Gitsigns reset_hunk<CR>', { desc = '[R]eset Hunk' })
+map('n', 'Zb', '<cmd>Gitsigns blame_line<CR>', { desc = 'Git [B]lame' })
+map('n', 'Zi', '<cmd>Octo issue list<CR>', { desc = 'GitHub [I]ssues' })
+map('n', 'Zr', '<cmd>Octo pr list<CR>', { desc = 'GitHub [R]equests (PRs)' })
+map('n', 'Zo', '<cmd>Octo repo browse<CR>', { desc = '[O]pen Repo in Browser' })
 
-map('n', 'Zs', '<cmd>w<cr>', { desc = 'Save file' })
-map('n', 'ZS', '<cmd>wa<cr>', { desc = 'Save all files' })
+-- n - new buffers/split/code
+wk.add {
+  { 'n', group = 'Explorer/file commands' },
+}
+map('n', 'nf', ':e %:p:h/', { desc = 'New file (local dir)' })
+map('n', 'nt', 'o-- TODO: <esc>A', { desc = 'New TODO comment' })
+map('n', 'nd', function() vim.diagnostic.jump { count = 1 } end, { desc = 'New (Next) Diagnostic' })
+map('n', 'nh', '<cmd>Gitsigns next_hunk<cr>', { desc = 'New (Next) Git Hunk' })
 
-map('n', 'Zr', function()
-  local old = vim.fn.expand '%'
-  local new = vim.fn.input('Rename to: ', old)
-  if new ~= '' and new ~= old then
-    vim.cmd('saveas ' .. new)
-    vim.fn.delete(old)
-    vim.cmd 'redraw'
-  end
-end, { desc = 'Rename file' })
-
-map('n', 'Zd', function()
-  local file = vim.fn.expand '%'
-  local confirm = vim.fn.input('Delete ' .. file .. '? [y/N]: ')
-  if confirm:lower() == 'y' then
-    vim.fn.delete(file)
-    vim.cmd 'bd!'
-  end
-end, { desc = 'Delete file' })
-
-map('n', 'Zc', function()
-  local file = vim.fn.expand '%:p'
-  vim.fn.setreg('+', file)
-  vim.notify('Copied: ' .. file, vim.log.levels.INFO)
-end, { desc = 'Copy file path to clipboard' })
-
-map('n', 'Zf', function()
-  vim.fn.setreg('+', vim.fn.expand '%:t')
-  vim.notify('Copied: ' .. vim.fn.expand '%:t', vim.log.levels.INFO)
-end, { desc = 'Copy filename to clipboard' })
-
-map('n', 'Zx', '<cmd>bd<cr>', { desc = 'Close file / buffer' })
-
-wk.add { { 'm', group = 'Editor AI (pending setup)' } }
-
-wk.add { { 'M', group = 'App AI (pending setup)' } }
+-- n - new tabs/workspace/etc..
+wk.add {
+  { 'N', group = 'Explorer/file commands' },
+}
+map('n', 'Ns', '<cmd>RemoteStart<cr>', { desc = 'New Remote Session' })
+map('n', 'Nf', '<cmd>Telescope find_files<cr>', { desc = 'New Workspace File' })
+map('n', 'Nt', '<cmd>vnew | terminal<cr>', { desc = 'New Terminal Split' })
+map('n', 'Nw', '<cmd>vnew<cr>', { desc = 'New Empty Window' })
+map('n', 'Nr', '<cmd>Telescope oldfiles<cr>', { desc = 'New Recent Files List' })

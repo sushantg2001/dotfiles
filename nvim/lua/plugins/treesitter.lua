@@ -5,7 +5,8 @@ return {
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
   },
-  main = 'nvim-treesitter',
+  -- CHANGE THIS:
+  main = 'nvim-treesitter.configs',
   version = '*',
   opts = {
     ensure_installed = {
@@ -42,8 +43,8 @@ return {
           ['ic'] = { query = '@class.inner', desc = 'Inside class' },
           ['aa'] = { query = '@parameter.outer', desc = 'Around argument' },
           ['ia'] = { query = '@parameter.inner', desc = 'Inside argument' },
-          ['ii'] = { query = '@conditional.outer', desc = 'Around if' },
-          ['ai'] = { query = '@conditional.inner', desc = 'Inside if' },
+          ['ai'] = { query = '@conditional.inner', desc = 'Inside if' }, -- Swapped to be logical
+          ['ii'] = { query = '@conditional.outer', desc = 'Around if' }, -- Swapped to be logical
           ['al'] = { query = '@loop.outer', desc = 'Around loop' },
           ['il'] = { query = '@loop.inner', desc = 'Inside loop' },
         },

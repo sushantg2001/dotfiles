@@ -12,7 +12,7 @@ return {
   -- -----------------------------------------------------------------
   {
     'lewis6991/gitsigns.nvim',
-    version = "*", 
+    version = '*',
     opts = {
       signs = {
         add = { text = '+' },
@@ -40,5 +40,29 @@ return {
   {
     'sindrets/diffview.nvim',
     cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory' },
+  },
+
+  {
+    'pwntester/octo.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function() require('octo').setup() end,
+  },
+
+  -- NEOGIT: A Magit-like interface for Neovim (Better visual staging than Fugitive)
+  {
+    'NeogitOrg/neogit',
+    dependencies = { 'nvim-lua/plenary.nvim', 'sindrets/diffview.nvim' },
+    config = true,
+  },
+
+  -- GIT-CONFLICT: Visual markers and quick actions for merge conflicts
+  {
+    'akinsho/git-conflict.nvim',
+    version = '*',
+    config = true,
   },
 }

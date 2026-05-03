@@ -12,7 +12,7 @@ local augroup = vim.api.nvim_create_augroup
 
 autocmd('TextYankPost', {
   group = augroup('yank-highlight', { clear = true }),
-  callback = function() vim.highlight.on_yank() end,
+  callback = function() vim.hl.on_yank() end,
 })
 
 -- =============================================================================
