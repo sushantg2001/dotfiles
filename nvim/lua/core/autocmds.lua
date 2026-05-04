@@ -73,3 +73,15 @@ autocmd('FileType', {
     vim.opt_local.linebreak = true
   end,
 })
+
+vim.api.nvim_create_autocmd('WinEnter', {
+  callback = function()
+    local win_config = vim.api.nvim_win_get_config(0)
+
+    -- If the window is relative (a float), map Esc to close it
+    if win_config.relative ~= '' then
+      vim.keymap.set('n', '<esc>', ':q<cr>', { buffer = true, silent = true, nowait = true })
+      vim.keymap.set('n', '<C-c>', ':q<cr>', { buffer = true, silent = true, nowait = true })
+    end
+  end,
+})

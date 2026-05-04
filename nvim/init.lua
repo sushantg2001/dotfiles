@@ -17,4 +17,5 @@ vim.g.is_mac = vim.fn.has 'mac' == 1
 require 'core.options'
 require 'core.autocmds'
 require 'core.lazy' -- plugins load here
+require 'core.commands' -- user defined commands
 require 'keymaps' -- all keymaps load after plugins

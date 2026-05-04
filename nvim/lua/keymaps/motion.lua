@@ -38,8 +38,6 @@ cmp.setup {
         fallback()
       end
     end, { 'i', 's' }),
-    ['<C-e>'] = cmp.mapping.scroll_docs(4),
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
   },
 }
 
@@ -48,16 +46,81 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        ['<Tab>'] = actions.move_selection_next,
-        ['<S-Tab>'] = actions.move_selection_previous,
+        ['<tab>'] = 'move_selection_next',
+        ['<s-tab>'] = 'move_selection_previous',
+        ['<c-l>'] = 'move_selection_next',
+        ['<c-h>'] = 'move_selection_previous',
+        ['<c-k>'] = 'preview_scrolling_up',
+        ['<c-j>'] = 'preview_scrolling_down',
       },
       n = {
-        ['k'] = actions.move_selection_previous,
-        ['j'] = actions.move_selection_next,
-        ['<C-e>'] = actions.preview_scrolling_down,
-        ['<C-b>'] = actions.preview_scrolling_up,
-        ['<Esc>'] = actions.close,
+        ['k'] = 'move_selection_previous',
+        ['j'] = 'move_selection_next',
+        ['<c-j>'] = 'preview_scrolling_down',
+        ['<c-k>'] = 'preview_scrolling_up',
+        ['<esc>'] = 'close',
       },
+    },
+  },
+}
+
+require('neo-tree').setup {
+  window = {
+    mappings = {
+      ['r'] = 'none',
+      ['R'] = 'none',
+      ['q'] = 'none',
+      ['Q'] = 'none',
+      ['z'] = 'none',
+      ['Z'] = 'none',
+      ['n'] = 'none',
+      ['N'] = 'none',
+      ['m'] = 'none',
+      ['M'] = 'none',
+      ['<tab>'] = {
+        'toggle_preview',
+        config = { use_float = true, base = 'right', width = 45, title = 'preview' },
+      },
+      ['<S-CR>'] = function(state)
+        local node = state.tree:get_node()
+        if not node then return end
+        if node.type == 'directory' then
+          require('neo-tree.sources.filesystem.commands').toggle_node(state)
+          return
+        end
+        local winid = state.preview_winid
+        local tree_win = state.winid
+        local current = vim.api.nvim_get_current_win()
+        if winid and vim.api.nvim_win_is_valid(winid) then
+          if current == tree_win then
+            vim.api.nvim_set_current_win(winid)
+          else
+            vim.api.nvim_set_current_win(tree_win)
+          end
+          return
+        end
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'm', false)
+        vim.defer_fn(function() require('neo-tree.sources.common.commands').focus_preview(state) end, 50)
+      end,
+      ['<Esc>'] = 'clear_filter',
+      ['<C-c>'] = 'clear_filter',
+      ['<cr>'] = 'open',
+      ['<space>'] = 'set_root',
+      ['<S-space>'] = 'navigate_up',
+      ['b'] = 'prev_source',
+      ['e'] = 'next_source',
+      ['i'] = 'open_leftabove_vs',
+      ['a'] = 'open_rightbelow_vs',
+      ['t'] = 'filter_on_submit',
+      ['f'] = 'fuzzy_finder',
+      ['o'] = { 'add', config = { show_path = 'none' } },
+      ['O'] = 'add_directory',
+      ['x'] = 'delete',
+      ['X'] = 'close_window',
+      ['c'] = 'rename',
+      ['y'] = 'copy_to_clipboard',
+      ['p'] = 'paste_from_clipboard',
+      ['.'] = 'refresh',
     },
   },
 }

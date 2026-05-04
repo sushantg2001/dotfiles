@@ -44,23 +44,50 @@ return {
     end,
   },
 
-  -- -----------------------------------------------------------------
-  -- BUFFERLINE - VSCode-style tabs across the top
-  -- shows open buffers as clickable tabs with icons, modified indicator
-  -- -----------------------------------------------------------------
+  -- BUFFERLINE
+  -- Dependencies:
+  --   - nvim-web-devicons: file icons
+  --   - scope.nvim: isolates buffers per tab page
+  --   - bufdelete.nvim: smarter buffer deletion (no layout disruption)
+  -- =============================================================================
+
+  {
+    'famiu/bufdelete.nvim',
+    cmd = { 'Bdelete', 'Bwipeout' },
+  },
+
+  {
+    'tiagovla/scope.nvim',
+    config = function()
+      -- required for scope.nvim to track buffers per tab correctly
+      vim.opt.sessionoptions = { 'buffers', 'tabpages', 'globals' }
+
+      require('scope').setup {
+        restore_state = false,
+      }
+      -- tell telescope about scoped buffers so :Telescope buffers
+      -- only shows current tab's buffers
+      local ok, telescope = pcall(require, 'telescope')
+      if ok then pcall(telescope.load_extension, 'scope') end
+    end,
+  },
   {
     'akinsho/bufferline.nvim',
     version = '*',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+      'tiagovla/scope.nvim', -- must load before bufferline
+      'famiu/bufdelete.nvim',
+    },
     config = function()
       require('bufferline').setup {
         options = {
-          mode = 'buffers', -- show buffers (not tabs)
+          mode = 'buffers',
           style_preset = require('bufferline').style_preset.default,
           themable = true,
-          numbers = 'none',
-          close_command = 'bdelete! %d',
-          right_mouse_command = 'bdelete! %d',
+          numbers = 'ordinal',
+          close_command = 'Bdelete! %d',
+          right_mouse_command = 'Bdelete! %d',
           left_mouse_command = 'buffer %d',
           indicator = { style = 'icon', icon = '?' },
           buffer_close_icon = '??',
@@ -71,7 +98,9 @@ return {
           max_name_length = 18,
           max_prefix_length = 15,
           tab_size = 20,
-          diagnostics = 'nvim_lsp', -- show LSP errors on tabs
+          truncate_names = true,
+          diagnostics = 'nvim_lsp',
+          diagnostics_update_in_insert = false, -- don't update while typing
           diagnostics_indicator = function(count, level)
             local icon = level:match 'error' and ' ' or ' '
             return ' ' .. icon .. count
@@ -79,20 +108,41 @@ return {
           offsets = {
             {
               filetype = 'neo-tree',
-              text = 'File Explorer',
-              text_align = 'center',
+              text = ' Explorer',
+              text_align = 'left',
+              separator = true,
+            },
+            {
+              filetype = 'toggleterm',
+              text = ' Terminal',
+              text_align = 'left',
               separator = true,
             },
           },
           show_buffer_icons = true,
           show_buffer_close_icons = true,
           show_close_icon = true,
-          show_tab_indicators = true,
-          persist_buffer_sort = true,
-          separator_style = 'slant', -- 'slant'|'slope'|'thick'|'thin'
+          show_tab_indicators = true, -- shows tab number badge
+          show_duplicate_prefix = true, -- show path when two files share a name
+          persist_buffer_sort = true, -- remember manual reorders
+          move_wraps_at_ends = true, -- wrap when moving past first/last
           enforce_regular_tabs = false,
           always_show_bufferline = true,
           sort_by = 'insert_after_current',
+          separator_style = 'slant',
+          groups = {
+            options = { toggle_hidden_on_enter = true },
+            items = {
+              require('bufferline.groups').builtin.pinned:with {
+                icon = '??',
+              },
+            },
+          },
+          hover = {
+            enabled = true,
+            delay = 200,
+            reveal = { 'close' },
+          },
         },
       }
     end,
@@ -108,31 +158,33 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-tree/nvim-web-devicons',
-      'MunifTanjim/nui.nvim',
+      'muniftanjim/nui.nvim',
     },
     config = function()
-      -- remove legacy commands
       vim.g.neo_tree_remove_legacy_commands = 1
 
       require('neo-tree').setup {
         close_if_last_window = true,
         popup_border_style = 'rounded',
-        -- don't open if window is too small (prevents E36)
         open_files_do_not_replace_types = { 'terminal', 'trouble', 'qf' },
         enable_git_status = true,
         enable_diagnostics = true,
-        -- enable_normal_mode_for_inputs removed in newer neo-tree
-        -- use event_handlers with neo_tree_popup_input_ready instead
+
         event_handlers = {
           {
             event = 'neo_tree_popup_input_ready',
             handler = function(args)
               vim.cmd 'stopinsert'
-              vim.keymap.set('i', '<esc>', vim.cmd.stopinsert, {
-                noremap = true,
-                buffer = args.bufnr,
-              })
+              vim.keymap.set('i', '<esc>', vim.cmd.stopinsert, { noremap = true, buffer = args.bufnr })
             end,
+            {
+              event = 'neo_tree_buffer_enter',
+              handler = function(arg)
+                -- This ensures that when you are INSIDE the preview window,
+                -- Esc will actually close it.
+                if vim.bo[arg.bufnr].filetype == 'neo-tree-preview' then vim.keymap.set('n', '<esc>', '<cmd>q<cr>', { buffer = arg.bufnr, noremap = true }) end
+              end,
+            },
           },
         },
 
@@ -142,37 +194,29 @@ return {
             padding = 1,
             with_markers = true,
             indent_marker = '³',
-            last_indent_marker = 'À',
-            highlight = 'NeoTreeIndentMarker',
+            last_indent_marker = 'à',
+            highlight = 'neotreeindentmarker',
             with_expanders = true,
-            expander_collapsed = '',
-            expander_expanded = '',
-            expander_highlight = 'NeoTreeExpander',
           },
           icon = {
-            folder_closed = '',
-            folder_open = '',
+            folder_closed = '?',
+            folder_open = '?',
             folder_empty = '??',
-            default = '*',
-            highlight = 'NeoTreeFileIcon',
+            default = '??',
+            highlight = 'neotreefileicon',
           },
-          modified = { symbol = '[+]', highlight = 'NeoTreeModified' },
-          name = {
-            trailing_slash = false,
-            use_git_status_colors = true,
-            highlight = 'NeoTreeFileName',
-          },
+          modified = { symbol = '[+]', highlight = 'neotreemodified' },
           git_status = {
             symbols = {
               added = '?',
-              modified = '',
+              modified = '?',
               deleted = '?',
               renamed = '??',
-              untracked = '',
-              ignored = '',
+              untracked = '?',
+              ignored = '?',
               unstaged = '??',
-              staged = '',
-              conflict = '',
+              staged = '?',
+              conflict = '?',
             },
           },
         },
@@ -181,66 +225,19 @@ return {
           position = 'left',
           width = 35,
           mapping_options = { noremap = true, nowait = true },
-          mappings = {
-            ['<cr>'] = 'open_drop',
-            ['<C-cr>'] = 'open_with_window_picker',
-            ['<Esc>'] = 'clear_filter',
-            ['<C-x>'] = 'close_window',
-            ['<C-b>'] = { 'scroll_preview', config = { direction = 10 } },
-            ['<C-e>'] = { 'scroll_preview', config = { direction = -10 } },
-            ['<C-c>'] = 'revert_preview',
-            ['<space>'] = 'set_root',
-            ['f'] = 'fuzzy_finder',
-            ['t'] = 'filter_on_submit',
-            ['b'] = 'prev_source',
-            ['e'] = 'next_source',
-            ['o'] = { 'toggle_preview', config = { use_float = true } },
-            ['O'] = { 'focus_preview', config = { use_float = true } },
-            ['z'] = 'open_split',
-            ['Z'] = 'open_vsplit',
-            ['n'] = { 'add', config = { show_path = 'none' } },
-            ['N'] = 'add_directory',
-            ['x'] = 'delete',
-            ['c'] = 'rename',
-            ['C'] = 'rename_basename',
-            ['y'] = 'copy_to_clipboard',
-            ['d'] = 'cut_to_clipboard',
-            ['p'] = 'paste_from_clipboard',
-            ['Y'] = 'copy',
-            ['D'] = 'move',
-            ['.'] = 'refresh',
-          },
         },
 
         filesystem = {
           filtered_items = {
             visible = false,
-            hide_dotfiles = false, -- show dotfiles
+            hide_dotfiles = false,
             hide_gitignored = true,
-            hide_hidden = false,
             hide_by_name = { '.git', 'node_modules', '__pycache__' },
-            always_show = { '.env', '.gitignore', '.github' },
+            always_show = { '.env', '.gitignore' },
           },
-          follow_current_file = {
-            enabled = true, -- highlight current file in tree
-            leave_dirs_open = false,
-          },
-          group_empty_dirs = true,
+          follow_current_file = { enabled = true },
           hijack_netrw_behavior = 'open_current',
-          use_libuv_file_watcher = true, -- auto-refresh on file system changes
-        },
-
-        buffers = {
-          follow_current_file = {
-            enabled = true,
-            leave_dirs_open = false,
-          },
-          group_empty_dirs = true,
-          show_unloaded = true,
-        },
-
-        git_status = {
-          window = { position = 'float' },
+          use_libuv_file_watcher = true,
         },
       }
     end,
@@ -250,7 +247,7 @@ return {
   -- PROJECT.NVIM - workspace/project detection
   -- detects project root from .git, package.json, pyproject.toml etc.
   -- integrates with telescope and neo-tree
-  -- :Telescope projects  picker for all known projects
+  -- :Telescope projects picker for all known projects
   -- -----------------------------------------------------------------
   {
     'ahmedkhalf/project.nvim',

@@ -47,6 +47,9 @@ return {
 
     require('remote-nvim').setup {
       neovim_version = local_version,
+      ssh_config = {
+        scp_binary = 'scp -O',
+      },
       progress_view = { type = 'popup' },
       offline_mode = { enabled = false },
       client_callback = function(port, workspace_config)

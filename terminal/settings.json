@@ -5,6 +5,13 @@
     {
       "command": {
         "action": "sendInput",
+        "input": "\u001e"
+      },
+      "id": "User.sendInput.altenter"
+    },
+    {
+      "command": {
+        "action": "sendInput",
         "input": "\u001b[105;5u"
       },
       "id": "User.sendInput.4E4C1E5F"
@@ -40,6 +47,20 @@
     {
       "command": {
         "action": "sendInput",
+        "input": "\u001d"
+      },
+      "id": "User.sendInput.alt["
+    },
+    {
+      "command": {
+        "action": "sendInput",
+        "input": "\u001c"
+      },
+      "id": "User.sendInput.shiftbs"
+    },
+    {
+      "command": {
+        "action": "sendInput",
         "input": "\u001b[47;5u"
       },
       "id": "User.sendInput.3AE82899"
@@ -57,19 +78,36 @@
         "input": "\u001b[25~"
       },
       "id": "User.sendInput.449804E0"
-    },
-    {
-      "command": {
-        "action": "sendInput",
-        "input": "\u001e"
-      },
-      "id": "User.sendInput.altenter"
     }
   ],
   "copyFormatting": "none",
   "copyOnSelect": false,
   "defaultProfile": "{a7aefedf-9aae-5349-a97b-b11c1007e26f}",
   "keybindings": [
+    {
+      "id": "User.sendInput.8882FD6D",
+      "keys": "shift+enter"
+    },
+    {
+      "id": "User.sendInput.alt[",
+      "keys": "alt+["
+    },
+    {
+      "id": "User.sendInput.shiftbs",
+      "keys": "shift+backspace"
+    },
+    {
+      "id": "Terminal.CopyToClipboard",
+      "keys": "ctrl+y"
+    },
+    {
+      "id": "Terminal.PasteFromClipboard",
+      "keys": "ctrl+p"
+    },
+    {
+      "id": "User.sendInput.3AE82899",
+      "keys": "ctrl+/"
+    },
     {
       "id": "User.sendInput.4E4C1E5F",
       "keys": "ctrl+i"
@@ -79,24 +117,16 @@
       "keys": "ctrl+]"
     },
     {
-      "id": "User.sendInput.3DF8C0C3",
-      "keys": "ctrl+'"
+      "id": "User.sendInput.449804E0",
+      "keys": "ctrl+["
     },
     {
       "id": "User.sendInput.RedoFix",
       "keys": "ctrl+shift+u"
     },
     {
-      "id": "User.sendInput.449804E0",
-      "keys": "ctrl+["
-    },
-    {
-      "id": "User.sendInput.3AE82899",
-      "keys": "ctrl+/"
-    },
-    {
-      "id": "User.sendInput.8882FD6D",
-      "keys": "shift+enter"
+      "id": "User.sendInput.3DF8C0C3",
+      "keys": "ctrl+'"
     },
     {
       "id": "User.sendInput.F8A79DCB",

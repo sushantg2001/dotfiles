@@ -16,8 +16,8 @@ map('n', ':', 'N', { desc = 'Next search match' })
 map({ 'n', 'v' }, '<C-h>', '?', { desc = 'forward search' })
 map({ 'n', 'v' }, '<C-l>', '/', { desc = 'backward search' })
 
-map({ 'n', 'v' }, '>', ';', { desc = 'Next f/t match' })
-map({ 'n', 'v' }, '<', ',', { desc = 'Prev f/t match' })
+map({ 'n', 'o', 'v' }, '>', ';', { desc = 'Next f/t match' })
+map({ 'n', 'o', 'v' }, '<', ',', { desc = 'Prev f/t match' })
 
 local ok, telescope = pcall(require, 'telescope.builtin')
 if not ok then return end

@@ -58,21 +58,26 @@ return {
   {
     'folke/flash.nvim',
     event = 'VeryLazy',
-    opts = {},
-  },
-
-  {
-    'folke/flash.nvim',
-    event = 'VeryLazy',
     opts = {
       -- You can add flash-specific config here
       modes = {
         search = {
           enabled = true, -- This allows flash to enhance your regular / search
         },
+        char = {
+          enabled = false,
+        },
       },
     },
   },
+  {
+    'smoka7/hop.nvim',
+    version = '*',
+    opts = {
+      keys = 'fjdkslaghrueiwovmcptynb',
+    },
+  },
+
   'folke/which-key.nvim',
   event = 'VimEnter',
   version = '*',

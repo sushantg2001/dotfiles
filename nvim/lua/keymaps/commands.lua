@@ -1,22 +1,14 @@
 -- =============================================================================
 -- COMMANDS - intent menu system
--- Replicates your VSCode Commands extension menu system using which-key.
--- Single letter = intent group. Pause after letter to see menu.
---
--- r = frequent editor commands   (VSCode r)
--- R = frequent app commands      (VSCode R)
--- q = run / build commands       (VSCode Ctrl+q)
--- Q = play macro                 (covered in tools.lua)
--- z = new intent commands        (VSCode z)
--- Z = file intent commands       (VSCode Z)
--- m = editor AI / machine        (VSCode m)
--- M = app AI / machine           (VSCode M)
---
--- NOTE: these override vim defaults in normal mode:
---   r  = replace char       moved to <leader>rc or use native R for replace mode
---   z  = fold commands      moved to <leader>z prefix
---   m  = set mark           use native m{a-z} instead
--- =============================================================================
+-- g = goto/lsp
+-- r = frequent editor commands
+-- R = frequent app commands
+-- q = run / build commands
+-- Q = play macro
+-- z = new intent commands
+-- Z = file intent commands
+-- m = editor AI / machine
+-- M = app AI / machine
 
 local map = vim.keymap.set
 local wk = require 'which-key'
@@ -28,6 +20,11 @@ local function neotree(cmd)
   end
   vim.cmd('Neotree ' .. cmd)
 end
+
+-- q - record macro
+-- Q - Play macro
+map('n', 'Q', '@', { desc = 'Play macro' })
+
 -- r - commands mode
 map({ 'v', 'n' }, 'r', ':', { desc = 'commands mode' })
 
@@ -42,26 +39,28 @@ map('n', 'RR', 'R', { desc = 'Open replace mode' })
 map('n', 'Rl', '<cmd>Lazy<cr>', { desc = 'Open Lazy' })
 map('n', 'Rm', '<cmd>Mason<cr>', { desc = 'Open Mason' })
 map('n', 'Rh', '<cmd>checkhealth<cr>', { desc = 'Check health' })
+map('n', 'Rx', '<cmd>Bdelete<cr>', { desc = 'Close buffer' })
 map('n', 'Rq', '<cmd>qa<cr>', { desc = 'Quit all' })
 map('n', 'RQ', '<cmd>qa!<cr>', { desc = 'Force quit all' })
 map('n', 'Rs', '<cmd>wa<cr>', { desc = 'save all' })
 
--- z - file/splits/explorer commands
+map({ 'n', 'v', 'i', 'x', 'o', 'c', 't' }, '<A-r>', '<cmd>Telescope commands<cr>', { desc = 'Commands' })
+
+-- z - file/splits/tabs/explorer commands
+map('n', 'z', '<Nop>', { desc = 'Disable default z' })
 wk.add {
   { 'z', group = 'Explorer/buffer/tabs/splits commands' },
 }
-map('n', 'zz', function() neotree 'toggle' end, { desc = 'Toggle Explorer' })
-map('n', 'zf', function() neotree 'reveal' end, { desc = 'Explorer reveal [F]ile' })
-map('n', 'zb', function() neotree 'buffers' end, { desc = '[E]xplorer [B]uffers' })
-map('n', 'zl', '<cmd>BufferLineCycleNext<cr>', { desc = 'Next buffer tab' })
-map('n', 'zh', '<cmd>BufferLineCyclePrev<cr>', { desc = 'Prev buffer tab' })
-map('n', 'zs', '<cmd>vsplit<CR>', { desc = 'Split Vertically' })
-map('n', 'zS', '<cmd>split<CR>', { desc = 'Split Horizontally' })
-map('n', 'zx', '<C-w>c', { desc = '[C]lose current split' })
-map('n', 'zm', '<C-w>o', { desc = 'Close [O]ther splits (Maximize)' })
-map('n', 'ze', '<C-w>=', { desc = '[E]qualize split sizes' })
+map('n', 'zz', function() neotree 'toggle' end, { desc = 'Toggle Neotree' })
+map('n', 'zZ', function() neotree 'reveal' end, { desc = 'Reveal file in neotree' })
+map('n', 'zf', '<cmd>BufferLinePick', { desc = 'Split Vertically' })
+map('n', 'zv', '<cmd>vsplit<CR>', { desc = 'Split Vertically' })
+map('n', 'zs', '<cmd>split<CR>', { desc = 'Split Horizontally' })
+map('n', 'zn', '<cmd>tabnew<CR>', { desc = 'new tab' })
+map('n', 'zx', '<cmd>tabclose<CR>', { desc = 'new tab' })
 
 -- Z - Git/Github/tabs/projects commands
+map('n', 'Z', '<Nop>', { desc = 'Disable default Z' })
 wk.add {
   { 'Z', group = 'Explorer/file commands' },
 }
@@ -76,25 +75,48 @@ map('n', 'Zp', '<cmd>Gitsigns preview_hunk<CR>', { desc = '[p]review Hunk' })
 map('n', 'Zs', '<cmd>Gitsigns stage_hunk<CR>', { desc = '[S]tage Hunk' })
 map('n', 'Zr', '<cmd>Gitsigns reset_hunk<CR>', { desc = '[R]eset Hunk' })
 map('n', 'Zb', '<cmd>Gitsigns blame_line<CR>', { desc = 'Git [B]lame' })
-map('n', 'Zi', '<cmd>Octo issue list<CR>', { desc = 'GitHub [I]ssues' })
-map('n', 'Zr', '<cmd>Octo pr list<CR>', { desc = 'GitHub [R]equests (PRs)' })
-map('n', 'Zo', '<cmd>Octo repo browse<CR>', { desc = '[O]pen Repo in Browser' })
 
--- n - new buffers/split/code
+map('n', 'n', '<Nop>', { desc = 'Disable default n' })
 wk.add {
-  { 'n', group = 'Explorer/file commands' },
+  { 'n', group = 'New in editor' },
 }
-map('n', 'nf', ':e %:p:h/', { desc = 'New file (local dir)' })
-map('n', 'nt', 'o-- TODO: <esc>A', { desc = 'New TODO comment' })
-map('n', 'nd', function() vim.diagnostic.jump { count = 1 } end, { desc = 'New (Next) Diagnostic' })
-map('n', 'nh', '<cmd>Gitsigns next_hunk<cr>', { desc = 'New (Next) Git Hunk' })
 
--- n - new tabs/workspace/etc..
+map('n', 'N', '<Nop>', { desc = 'Disable default N' })
 wk.add {
-  { 'N', group = 'Explorer/file commands' },
+  { 'N', group = 'New in app' },
 }
-map('n', 'Ns', '<cmd>RemoteStart<cr>', { desc = 'New Remote Session' })
-map('n', 'Nf', '<cmd>Telescope find_files<cr>', { desc = 'New Workspace File' })
-map('n', 'Nt', '<cmd>vnew | terminal<cr>', { desc = 'New Terminal Split' })
-map('n', 'Nw', '<cmd>vnew<cr>', { desc = 'New Empty Window' })
-map('n', 'Nr', '<cmd>Telescope oldfiles<cr>', { desc = 'New Recent Files List' })
+map('n', 'Nn', '<cmd>enew<cr>', { desc = 'New empty buffer' })
+map('n', 'Nf', function()
+  local name = vim.fn.input 'File name: '
+  if name ~= '' then vim.cmd('edit ' .. name) end
+end, { desc = 'New named file' })
+map('n', 'Nd', function()
+  local dir = vim.fn.input 'Directory: '
+  if dir ~= '' then vim.fn.mkdir(dir, 'p') end
+end, { desc = 'New directory' })
+map('n', 'Nt', '<cmd>terminal<cr>', { desc = 'New terminal (current)' })
+map('n', 'Ntv', '<cmd>vsplit | terminal<cr>', { desc = 'New terminal (vsplit)' })
+map('n', 'Nts', '<cmd>split | terminal<cr>', { desc = 'New terminal (split)' })
+
+wk.add {
+  { 'g', group = 'Goto/LSP' },
+}
+
+map('n', 'ga', vim.lsp.buf.code_action, { desc = 'Code action' })
+map('n', 'gr', vim.lsp.buf.rename, { desc = 'Rename symbol' })
+map('n', 'gh', vim.lsp.buf.hover, { desc = 'Hover docs' })
+map('n', 'gH', vim.lsp.buf.signature_help, { desc = 'Signature help' })
+map('n', 'gD', vim.lsp.buf.declaration, { desc = 'Declaration' })
+map('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', { desc = 'Definitions' })
+map('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', { desc = 'Implementations' })
+map('n', 'gt', '<cmd>Telescope lsp_type_definitions<cr>', { desc = 'Type definitions' })
+map('n', 'gR', '<cmd>Telescope lsp_references<cr>', { desc = 'References' })
+map('n', 'gI', '<cmd>Telescope lsp_incoming_calls<cr>', { desc = 'Incoming calls' })
+map('n', 'gO', '<cmd>Telescope lsp_outgoing_calls<cr>', { desc = 'Outgoing calls' })
+map('n', 'gS', '<cmd>Telescope lsp_document_symbols<cr>', { desc = 'Document symbols' })
+map('n', 'ge', vim.diagnostic.open_float, { desc = 'Show diagnostic' })
+map('n', 'gE', '<cmd>Telescope diagnostics bufnr=0<cr>', { desc = 'Buffer diagnostics' })
+map('n', 'g]', function() vim.diagnostic.jump { count = 1 } end, { desc = 'Next diagnostic' })
+map('n', 'g[', function() vim.diagnostic.jump { count = -1 } end, { desc = 'Prev diagnostic' })
+map('n', 'g}', function() vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR } end, { desc = 'Next error' })
+map('n', 'g{', function() vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR } end, { desc = 'Prev error' })
