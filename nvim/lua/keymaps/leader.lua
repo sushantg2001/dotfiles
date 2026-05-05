@@ -1,12 +1,19 @@
 local map = vim.keymap.set
 local wk = require 'which-key'
 
-map('n', '<leader>rc', '<cmd>RemoteStart<cr>', { desc = '[R]emote [C]onnect' })
-map('n', '<leader>rx', '<cmd>RemoteStop<cr>', { desc = '[R]emote disconnect [X]' })
-map('n', '<leader>ri', '<cmd>RemoteInfo<cr>', { desc = '[R]emote [I]nfo' })
-map('n', '<leader>rl', '<cmd>RemoteLog<cr>', { desc = '[R]emote [L]og' })
-map('n', '<leader>rk', '<cmd>RemoteCleanup<cr>', { desc = '[R]emote [K]ill + cleanup' })
-map('n', '<leader>rt', '<cmd>RemoteTerminal<cr>', { desc = 'Remote Terminal' })
+local function r(fn)
+  return function() require('core.remote')[fn]() end
+end
+
+wk.add {
+  { '<leader>r', group = '[R]emote' },
+}
+
+map('n', '<leader>ro', r 'open', { desc = '[R]emote [O]pen session' })
+map('n', '<leader>rs', r 'sync_only', { desc = '[R]emote [S]ync config' })
+map('n', '<leader>ri', r 'status', { desc = '[R]emote [I]nfo / status' })
+map('n', '<leader>rk', r 'cleanup', { desc = '[R]emote [K]ill / cleanup' })
+map('n', '<leader>ra', r 'add_host', { desc = '[R]emote [A]dd host' })
 
 wk.add {
   { '<leader>s', group = '[S]Hop' },

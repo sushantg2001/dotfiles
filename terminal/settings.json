@@ -19,30 +19,16 @@
     {
       "command": {
         "action": "sendInput",
+        "input": "\u001c"
+      },
+      "id": "User.sendInput.shiftbs"
+    },
+    {
+      "command": {
+        "action": "sendInput",
         "input": "\u001b[13;2u"
       },
       "id": "User.sendInput.8882FD6D"
-    },
-    {
-      "command": {
-        "action": "sendInput",
-        "input": "\u001b[39;5u"
-      },
-      "id": "User.sendInput.3DF8C0C3"
-    },
-    {
-      "command": {
-        "action": "sendInput",
-        "input": "\u001b[13;5u"
-      },
-      "id": "User.sendInput.F8A79DCB"
-    },
-    {
-      "command": {
-        "action": "sendInput",
-        "input": "\u001b[26~"
-      },
-      "id": "User.sendInput.5AD79F4A"
     },
     {
       "command": {
@@ -54,9 +40,9 @@
     {
       "command": {
         "action": "sendInput",
-        "input": "\u001c"
+        "input": "\u001b[39;5u"
       },
-      "id": "User.sendInput.shiftbs"
+      "id": "User.sendInput.3DF8C0C3"
     },
     {
       "command": {
@@ -64,6 +50,13 @@
         "input": "\u001b[47;5u"
       },
       "id": "User.sendInput.3AE82899"
+    },
+    {
+      "command": {
+        "action": "sendInput",
+        "input": "\u001b[26~"
+      },
+      "id": "User.sendInput.5AD79F4A"
     },
     {
       "command": {
@@ -78,12 +71,23 @@
         "input": "\u001b[25~"
       },
       "id": "User.sendInput.449804E0"
+    },
+    {
+      "command": {
+        "action": "sendInput",
+        "input": "\u001b[13;5u"
+      },
+      "id": "User.sendInput.2D9E4A19"
     }
   ],
   "copyFormatting": "none",
   "copyOnSelect": false,
   "defaultProfile": "{a7aefedf-9aae-5349-a97b-b11c1007e26f}",
   "keybindings": [
+    {
+      "id": "User.sendInput.shiftbs",
+      "keys": "shift+backspace"
+    },
     {
       "id": "User.sendInput.8882FD6D",
       "keys": "shift+enter"
@@ -93,28 +97,24 @@
       "keys": "alt+["
     },
     {
-      "id": "User.sendInput.shiftbs",
-      "keys": "shift+backspace"
-    },
-    {
       "id": "Terminal.CopyToClipboard",
       "keys": "ctrl+y"
-    },
-    {
-      "id": "Terminal.PasteFromClipboard",
-      "keys": "ctrl+p"
     },
     {
       "id": "User.sendInput.3AE82899",
       "keys": "ctrl+/"
     },
     {
-      "id": "User.sendInput.4E4C1E5F",
-      "keys": "ctrl+i"
+      "id": "Terminal.PasteFromClipboard",
+      "keys": "ctrl+p"
     },
     {
       "id": "User.sendInput.5AD79F4A",
       "keys": "ctrl+]"
+    },
+    {
+      "id": "User.sendInput.4E4C1E5F",
+      "keys": "ctrl+i"
     },
     {
       "id": "User.sendInput.449804E0",
@@ -129,7 +129,7 @@
       "keys": "ctrl+'"
     },
     {
-      "id": "User.sendInput.F8A79DCB",
+      "id": "User.sendInput.2D9E4A19",
       "keys": "ctrl+enter"
     },
     {

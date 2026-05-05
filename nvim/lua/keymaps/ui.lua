@@ -4,10 +4,8 @@
 -- =============================================================================
 
 local map = vim.keymap.set
-map('n', '<A-+>', '<C-=>', { desc = 'Increase size' })
-map('n', '<A-->', '<C-->', { desc = 'Decrease size' })
-map('n', '<C-+>', '<cmd>resize +2<cr>', { desc = 'Increase split height' })
-map('n', '<A-->', '<cmd>resize -2<cr>', { desc = 'Decrease split height' })
+map('n', '<A-=>', '<cmd>ResizeIncrease<cr>', { desc = 'Increase size' })
+map('n', '<A-->', '<cmd>ResizeDecrease<cr>', { desc = 'Decrease size' })
 
 map('n', '<F14>', '<cmd>BufferLineCycleNext<cr>', { desc = 'Next buffer tab (C+])' })
 map('n', '<F13>', '<cmd>BufferLineCyclePrev<cr>', { desc = 'Prev buffer tab (C+[)' })
@@ -21,12 +19,23 @@ map('n', '<A-l>', '<C-w>l', { desc = 'Focus right split' })
 map('n', '<A-]>', '<cmd>tabnext<cr>', { desc = 'Next tab' })
 map('n', '\29', '<cmd>tabprev<cr>', { desc = 'Prev tab' })
 
-map({ 'n', 'i', 'v', 'o' }, '<A-q>', function() _G.smart_run 'ToggleTerm' end)
-map('t', '<A-q>', function()
-  -- Escape terminal mode, then run the smart command
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes([[<C-\><C-n>]], true, true, true), 'n', false)
-  _G.smart_run 'ToggleTerm'
+map({ 'n', 'i', 'v', 'o' }, '<A-q>', function()
+  if _G.smart_run then
+    _G.smart_run 'ToggleTerm'
+  else
+    vim.cmd 'ToggleTerm'
+  end
 end)
+
+map('t', '<A-q>', function()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes([[<C-\><C-n>]], true, true, true), 'n', false)
+  if _G.smart_run then
+    _G.smart_run 'ToggleTerm'
+  else
+    vim.schedule(function() vim.cmd 'ToggleTerm' end)
+  end
+end)
+
 map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 map('t', '<A-h>', '<C-\\><C-n><C-w>h', { desc = 'Terminal: focus left' })
 map('t', '<A-l>', '<C-\\><C-n><C-w>l', { desc = 'Terminal: focus right' })
@@ -86,7 +95,7 @@ local function smart_close()
   end
 end
 
-map('n', '<C-x>', smart_close, { desc = 'Smart close split/buffer' })
+map({ 'n', 'v', 'i' }, '<C-x>', smart_close, { desc = 'Smart close split/buffer' })
 map('n', '<A-x>', '<cmd>qa!<cr>', { desc = 'Force quit all' })
 
 map({ 'n', 'i', 'v' }, '<A-\\>', function()

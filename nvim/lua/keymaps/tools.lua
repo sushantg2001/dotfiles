@@ -13,10 +13,10 @@ map('v', '<S-Tab>', '<gv', { desc = 'De-indent selection' })
 
 map('n', '<CR>', 'o<Esc>', { desc = 'Add line below' })
 map('n', '<S-CR>', 'O<Esc>', { desc = 'Add line above' })
-map({ 'n', 'i', 'v' }, '<C-CR>', '<cmd>w<cr><esc>', { desc = 'Save file' })
-map({ 'n', 'i', 'v' }, '\30', '<cmd>wa<cr>', { desc = 'Save all files (via Alt+Enter)' })
 map('n', '<CR>', 'o<Esc>k', { desc = 'Add blank line below' })
 map('n', '<S-CR>', 'O<Esc>j', { desc = 'Add blank line above' })
+map({ 'n', 'i', 'v' }, '<C-CR>', '<cmd>w<cr><esc>', { desc = 'Save file (via ctrl+enter)' })
+map({ 'n', 'i', 'v' }, '\30', '<cmd>wa<cr>', { desc = 'Save all files (via Alt+Enter)' })
 
 local cmp = require 'cmp'
 cmp.setup {
@@ -32,6 +32,8 @@ map({ 'n', 'v', 'o' }, "'", '"', { desc = 'Register prefix' })
 
 map({ 'n', 'v', 'o' }, '/', 'm', { desc = 'Mark position' })
 map({ 'n', 'v', 'o' }, '?', '`', { desc = 'Go to mark' })
+
+map({ 'n', 'v', 'o' }, '`', '<cmd>Telescope Keymaps', { desc = 'Keymaps' })
 
 map('n', '<BS>', '<C-o>', { desc = 'Jump back' })
 map('n', '\28', '<C-i>', { desc = 'Jump forward' })
