@@ -77,36 +77,44 @@ require('neo-tree').setup {
       ['N'] = 'none',
       ['m'] = 'none',
       ['M'] = 'none',
-      ['<tab>'] = {
+      ['<space>'] = 'none',
+      ['/'] = 'none',
+      ['?'] = 'none',
+      ['H'] = 'none',
+      ['L'] = 'none',
+      ['J'] = 'none',
+      ['K'] = 'none',
+      ['\\'] = 'toggle_hidden',
+      ['<C-CR>'] = {
         'toggle_preview',
         config = { use_float = true, base = 'right', width = 45, title = 'preview' },
       },
-      ['<S-CR>'] = function(state)
+      ['\30'] = function(state)
         local node = state.tree:get_node()
         if not node then return end
         if node.type == 'directory' then
           require('neo-tree.sources.filesystem.commands').toggle_node(state)
           return
         end
-        local winid = state.preview_winid
+        local preview = require 'neo-tree.sources.common.preview'
+        local current_win = vim.api.nvim_get_current_win()
         local tree_win = state.winid
-        local current = vim.api.nvim_get_current_win()
-        if winid and vim.api.nvim_win_is_valid(winid) then
-          if current == tree_win then
-            vim.api.nvim_set_current_win(winid)
+        if preview.is_active() then
+          if current_win == tree_win then
+            require('neo-tree.sources.common.commands').focus_preview(state)
           else
             vim.api.nvim_set_current_win(tree_win)
           end
-          return
+        else
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-CR>', true, false, true), 'm', false)
+          vim.defer_fn(function() require('neo-tree.sources.common.commands').focus_preview(state) end, 75) -- Increased slightly to 75ms for WSL stability
         end
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'm', false)
-        vim.defer_fn(function() require('neo-tree.sources.common.commands').focus_preview(state) end, 50)
       end,
       ['<Esc>'] = 'clear_filter',
       ['<C-c>'] = 'clear_filter',
-      ['<cr>'] = 'open',
-      ['<space>'] = 'set_root',
-      ['<S-space>'] = 'navigate_up',
+      ['<CR>'] = 'open',
+      ['<Tab>'] = 'set_root',
+      ['<S-Tab>'] = 'navigate_up',
       ['b'] = 'prev_source',
       ['e'] = 'next_source',
       ['i'] = 'open_leftabove_vs',
@@ -119,6 +127,9 @@ require('neo-tree').setup {
       ['X'] = 'close_window',
       ['c'] = 'rename',
       ['y'] = 'copy_to_clipboard',
+      ['Y'] = 'copy',
+      ['d'] = 'cut_to_clipboard',
+      ['D'] = 'move',
       ['p'] = 'paste_from_clipboard',
       ['.'] = 'refresh',
     },
