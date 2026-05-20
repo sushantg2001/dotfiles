@@ -33,7 +33,7 @@ map({ 'n', 'v', 'o' }, "'", '"', { desc = 'Register prefix' })
 map({ 'n', 'v', 'o' }, '/', 'm', { desc = 'Mark position' })
 map({ 'n', 'v', 'o' }, '?', '`', { desc = 'Go to mark' })
 
-map({ 'n', 'v', 'o' }, '`', '<cmd>Telescope Keymaps', { desc = 'Keymaps' })
+map({ 'n', 'v', 'o' }, '`', '<cmd>Telescope keymaps<cr>', { desc = 'Keymaps' })
 
 map('n', '<BS>', '<C-o>', { desc = 'Jump back' })
 map('n', '\28', '<C-i>', { desc = 'Jump forward' })

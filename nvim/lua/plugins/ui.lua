@@ -467,4 +467,25 @@ return {
       }
     end,
   },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+    ft = { 'markdown', 'codecompanion' },
+
+    config = function()
+      local orig_get_node_text = vim.treesitter.get_node_text
+      vim.treesitter.get_node_text = function(node, source, opts)
+        if not node then return '' end
+        if type(node) == 'table' and node[1] ~= nil then node = node[1] end
+        if type(node) ~= 'userdata' or type(node.range) ~= 'function' then return '' end
+        local ok, result = pcall(orig_get_node_text, node, source, opts)
+        return ok and result or ''
+      end
+
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = { 'markdown', 'codecompanion' },
+        callback = function() vim.opt_local.conceallevel = 2 end,
+      })
+    end,
+  },
 }

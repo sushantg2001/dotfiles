@@ -1,0 +1,157 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "autoupdate": true,
+    "lsp": true,
+    // Providers
+    "provider": {
+        "openrouter": {
+            "npm": "@ai-sdk/openai-compatible",
+            "options": {
+                "baseURL": "https://openrouter.ai/api/v1",
+            },
+            "whitelist": [
+                "anthropic/claude-opus-4.7",
+                "anthropic/claude-sonnet-4.6",
+                "deepseek/deepseek-v4-pro",
+                "deepseek/deepseek-v4-flash",
+                "moonshotai/kimi-k2.6",
+                "openrouter/free"
+            ],
+        },
+    },
+    // Agents
+    "agent": {
+        "free": {
+            "name": "free",
+            "description": "free openrouter models",
+            "model": "openrouter/openrouter/free",
+            "mode": "primary",
+            "permission": {
+                "bash": "deny",
+                "edit": "deny",
+                "write": "deny"
+            }
+        },
+        "ask": {
+            "name": "ask",
+            "description": "used for basic ask/search",
+            "model": "openrouter/deepseek/deepseek-v4-flash",
+            "mode": "primary",
+            "permission": {
+                "bash": "deny",
+                "edit": "deny",
+                "write": "deny"
+            }
+        },
+        "basic": {
+            "name": "basic",
+            "description": "used for basic tasks",
+            "model": "openrouter/deepseek/deepseek-v4-flash",
+            "mode": "primary",
+            "permission": {
+                "bash": "ask",
+                "edit": "allow",
+                "write": "allow"
+            }
+        },
+        "plan": {
+            "model": "openrouter/deepseek/deepseek-v4-pro",
+            "permission": {
+                "bash": "deny",
+                "edit": "deny",
+                "write": "deny"
+            }
+        },
+        "build": {
+            "model": "openrouter/deepseek/deepseek-v4-pro",
+            "permission": {
+                "bash": "ask",
+                "edit": "allow",
+                "write": "allow"
+            }
+        },
+        "code": {
+            "name": "code",
+            "description": "used for advance coding tasks",
+            "model": "openrouter/moonshotai/kimi-k2.6",
+            "mode": "primary",
+            "permission": {
+                "bash": "allow",
+                "edit": "allow",
+                "write": "allow"
+            }
+        },
+        "think": {
+            "name": "think",
+            "description": "used for active thinking tasks",
+            "model": "openrouter/anthropic/claude-sonnet-4.6",
+            "mode": "primary",
+            "permission": {
+                "bash": "allow",
+                "edit": "allow",
+                "write": "allow"
+            }
+        }
+    },
+    "default_agent": "ask",
+    // MCP Servers
+    "mcp": {
+        "filesystem": {
+            "type": "local",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "/home/sushantg2001",
+                "/mnt/c/Users/sushantg2001/Desktop/files/00. Obsidian"
+            ],
+            "enabled": true
+        },
+        "git": {
+            "type": "local",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-git"
+            ],
+            "enabled": true
+        },
+        "obsidian": {
+            "type": "local",
+            "command": "npx",
+            "args": [
+                "-y",
+                "mcp-obsidian",
+                "--vault",
+                "/mnt/c/Users/sushantg2001/Desktop/files/00. Obsidian"
+            ],
+            "enabled": true
+        },
+        "context7": {
+            "type": "remote",
+            "url": "https://mcp.context7.com/mcp",
+            "enabled": true
+        },
+        "sequential-thinking": {
+            "type": "local",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ],
+            "enabled": true
+        }
+    },
+    // Permissions
+    "permission": {
+        "mcp": {
+            "filesystem": "ask",
+            "git": "allow",
+            "obsidian": "allow",
+            "context7": "allow",
+            "sequential-thinking": "allow"
+        }
+    },
+    //  Snapshot
+    "snapshot": true
+}

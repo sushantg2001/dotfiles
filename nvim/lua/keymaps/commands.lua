@@ -29,20 +29,25 @@ map('n', 'Q', '@', { desc = 'Play macro' })
 map({ 'v', 'n' }, 'r', ':', { desc = 'commands mode' })
 
 -- R - workspace commands
-map('n', 'R', '<Nop>', { desc = 'Disable default Replace mode' })
+local opts = { noremap = true, silent = true }
+map('n', 'Rl', '<cmd>Lazy<cr>', vim.tbl_extend('force', opts, { desc = 'Open Lazy' }))
+map('n', 'Rm', '<cmd>Mason<cr>', vim.tbl_extend('force', opts, { desc = 'Open Mason' }))
+map('n', 'Rh', '<cmd>checkhealth<cr>', vim.tbl_extend('force', opts, { desc = 'Check health' }))
+map('n', 'Rx', '<cmd>Bdelete<cr>', vim.tbl_extend('force', opts, { desc = 'Close buffer' }))
+map('n', 'Rq', '<cmd>qa<cr>', vim.tbl_extend('force', opts, { desc = 'Quit all' }))
+map('n', 'Rr', 'r', { noremap = false, silent = true, desc = 'Replace char' })
+local wk = require 'which-key'
+
+wk.setup {
+  triggers = {
+    { '<auto>', mode = 'nxso' }, -- Keep default auto-triggers active
+    { 'R', mode = 'n' }, -- MANUALLY FORCE 'R' TO WORK AS A MENU TRIGGER IN NORMAL MODE
+  },
+}
+
 wk.add {
   { 'R', group = 'App commands' },
 }
-
-map('n', 'Rr', 'r', { desc = 'Replace letter' })
-map('n', 'RR', 'R', { desc = 'Open replace mode' })
-map('n', 'Rl', '<cmd>Lazy<cr>', { desc = 'Open Lazy' })
-map('n', 'Rm', '<cmd>Mason<cr>', { desc = 'Open Mason' })
-map('n', 'Rh', '<cmd>checkhealth<cr>', { desc = 'Check health' })
-map('n', 'Rx', '<cmd>Bdelete<cr>', { desc = 'Close buffer' })
-map('n', 'Rq', '<cmd>qa<cr>', { desc = 'Quit all' })
-map('n', 'RQ', '<cmd>qa!<cr>', { desc = 'Force quit all' })
-map('n', 'Rs', '<cmd>wa<cr>', { desc = 'save all' })
 
 map({ 'n', 'v', 'i', 'x', 'o', 'c', 't' }, '<A-r>', '<cmd>Telescope commands<cr>', { desc = 'Commands' })
 
@@ -65,16 +70,13 @@ wk.add {
   { 'Z', group = 'Explorer/file commands' },
 }
 map('n', 'Zg', '<cmd>Neogit<CR>', { desc = 'Neo[G]it Status' })
+map('n', 'Zs', '<cmd>Git status<CR>', { desc = 'Git Status' })
 map('n', 'Zc', '<cmd>Git commit<CR>', { desc = '[C]ommit (Fugitive)' })
 map('n', 'ZP', '<cmd>Git push<CR>', { desc = '[P]ush' })
 map('n', 'Zl', '<cmd>Git pull<CR>', { desc = 'Pu[l]l' })
 map('n', 'Zd', '<cmd>DiffviewOpen<CR>', { desc = '[D]iff Project' })
 map('n', 'Zh', '<cmd>DiffviewFileHistory %<CR>', { desc = 'File [H]istory' })
 map('n', 'Zx', '<cmd>GitConflictListQf<CR>', { desc = 'List Conflict [X]' })
-map('n', 'Zp', '<cmd>Gitsigns preview_hunk<CR>', { desc = '[p]review Hunk' })
-map('n', 'Zs', '<cmd>Gitsigns stage_hunk<CR>', { desc = '[S]tage Hunk' })
-map('n', 'Zr', '<cmd>Gitsigns reset_hunk<CR>', { desc = '[R]eset Hunk' })
-map('n', 'Zb', '<cmd>Gitsigns blame_line<CR>', { desc = 'Git [B]lame' })
 
 map('n', 'n', '<Nop>', { desc = 'Disable default n' })
 wk.add {
