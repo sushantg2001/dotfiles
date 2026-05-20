@@ -36,7 +36,6 @@ map('n', 'Rh', '<cmd>checkhealth<cr>', vim.tbl_extend('force', opts, { desc = 'C
 map('n', 'Rx', '<cmd>Bdelete<cr>', vim.tbl_extend('force', opts, { desc = 'Close buffer' }))
 map('n', 'Rq', '<cmd>qa<cr>', vim.tbl_extend('force', opts, { desc = 'Quit all' }))
 map('n', 'Rr', 'r', { noremap = false, silent = true, desc = 'Replace char' })
-local wk = require 'which-key'
 
 wk.setup {
   triggers = {
@@ -113,9 +112,6 @@ map('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', { desc = 'Definitions' })
 map('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', { desc = 'Implementations' })
 map('n', 'gt', '<cmd>Telescope lsp_type_definitions<cr>', { desc = 'Type definitions' })
 map('n', 'gR', '<cmd>Telescope lsp_references<cr>', { desc = 'References' })
-map('n', 'gI', '<cmd>Telescope lsp_incoming_calls<cr>', { desc = 'Incoming calls' })
-map('n', 'gO', '<cmd>Telescope lsp_outgoing_calls<cr>', { desc = 'Outgoing calls' })
-map('n', 'gS', '<cmd>Telescope lsp_document_symbols<cr>', { desc = 'Document symbols' })
 map('n', 'ge', vim.diagnostic.open_float, { desc = 'Show diagnostic' })
 map('n', 'gE', '<cmd>Telescope diagnostics bufnr=0<cr>', { desc = 'Buffer diagnostics' })
 map('n', 'g]', function() vim.diagnostic.jump { count = 1 } end, { desc = 'Next diagnostic' })
